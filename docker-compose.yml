@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  backend-service:
+    build: .
+    container_name: my-backend-container
+    depends_on:
+      - database-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database-service:5432/springcrud_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=000
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_LIQUIBASE_CHANGE_LOG=classpath:db/changelog/db.changelog-master.xml
+    ports:
+      - 3333:8080
+
+  database-service:
+    image: postgres
+    container_name: my-database-container
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=000
+      - POSTGRES_DB=springcrud_db
+    ports:
+      - 2345:5432

@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CountryMapper.class, CategoryMapper.class})
 public interface ProductMapper {
 
     @Mapping(source = "id", target = "idDto")

@@ -1,19 +1,19 @@
 package com.example.springcrudmid.controller;
 
 import com.example.springcrudmid.dto.CategoryDto;
-import com.example.springcrudmid.service.impl.CategoryServiceImpl;
+import com.example.springcrudmid.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryApi {
-    @Autowired
-    private final CategoryServiceImpl categoryService;
+
+    private final CategoryService categoryService;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -26,12 +26,14 @@ public class CategoryApi {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> addCategory(@RequestBody CategoryDto categoryDto) {
         categoryService.addCategory(categoryDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteCategory(@PathVariable(name = "id") Long id) {
         if (categoryService.deleteById(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
